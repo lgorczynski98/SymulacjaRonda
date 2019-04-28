@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: lightgreen;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Circle layoutX="300.0" layoutY="300.0" radius="151.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="40.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="0.7047619047619048" startX="0.4809523809523809" startY="0.2523809523809524">
+               <stops>
+                  <Stop color="#38b549" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+      <Line endX="100.0" layoutX="46.0" layoutY="300.0" startX="-100.0" strokeWidth="80.0" />
+      <Line endX="100.0" layoutX="563.0" layoutY="300.0" startX="-100.0" strokeWidth="80.0" />
+      <Line endX="100.0" layoutX="300.0" layoutY="560.0" rotate="90.0" startX="-100.0" strokeWidth="80.0" />
+      <Line endX="100.0" layoutX="300.0" layoutY="44.0" rotate="90.0" startX="-100.0" strokeWidth="80.0" />
+      <Text layoutX="245.0" layoutY="276.0" lineSpacing="5.0" strokeType="OUTSIDE" strokeWidth="10.0" style="-fx-font-size: 20;" text="Rondo Zesłańców Syberyjskich" textAlignment="CENTER" wrappingWidth="110.0" />
+      <Line endX="100.0" layoutX="48.0" layoutY="299.0" startX="-100.0" stroke="#f5f5f5" />
+      <Line endX="100.0" layoutX="552.0" layoutY="299.0" startX="-100.0" stroke="WHITE" />
+      <Line endX="100.0" layoutX="301.0" layoutY="48.0" rotate="90.0" startX="-100.0" stroke="WHITE" />
+      <Line endX="100.0" layoutX="301.0" layoutY="552.0" rotate="90.0" startX="-100.0" stroke="WHITE" />
+      <Circle fx:id="car" fill="DODGERBLUE" layoutX="300.0" layoutY="300.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+   </children>
+</Pane>
