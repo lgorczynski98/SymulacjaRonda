@@ -13,12 +13,19 @@ public class Controller implements Initializable
     @FXML
     public Pane panel;
 
+    private int carCount;
+
+    public Controller()
+    {
+        carCount = 5;
+    }
+
     private void drive(Thread th)
     {
         th.start();
         try
         {
-            sleep(300);
+            sleep(30);
         }
         catch(Exception e)
         {
@@ -30,14 +37,16 @@ public class Controller implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         Car.setPane(panel);
-        Thread th1 = new Thread(new Car());
-        Thread th2 = new Thread(new Car());
-        Thread th3 = new Thread(new Car());
+        Thread []cars = new Thread[carCount];
 
-        drive(th1);
-        drive(th2);
-        drive(th3);
-
+        for (int i = 0; i < carCount; i++)
+        {
+            cars[i] = new Thread(new Car());
+        }
+        for (int i = 0; i < carCount; i++)
+        {
+            drive(cars[i]);
+        }
     }
 }
 
