@@ -28,6 +28,5 @@
       <Line endX="100.0" layoutX="552.0" layoutY="299.0" startX="-100.0" stroke="WHITE" />
       <Line endX="100.0" layoutX="301.0" layoutY="48.0" rotate="90.0" startX="-100.0" stroke="WHITE" />
       <Line endX="100.0" layoutX="301.0" layoutY="552.0" rotate="90.0" startX="-100.0" stroke="WHITE" />
-      <Circle fx:id="car" fill="DODGERBLUE" layoutX="300.0" layoutY="300.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
    </children>
 </Pane>
