@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import static java.lang.Thread.sleep;
@@ -15,9 +16,18 @@ public class Controller implements Initializable
 
     private int carCount;
 
+    private LinkedList<Car> Entrance1;
+    private LinkedList<Car> Entrance2;
+    private LinkedList<Car> Entrance3;
+    private LinkedList<Car> Entrance4;
+
     public Controller()
     {
-        carCount = 5;
+        carCount = 1;
+        Entrance1 = new LinkedList<>();
+        Entrance2 = new LinkedList<>();
+        Entrance3 = new LinkedList<>();
+        Entrance4 = new LinkedList<>();
     }
 
     private void drive(Thread th)
@@ -33,6 +43,33 @@ public class Controller implements Initializable
         }
     }
 
+    private void addToEntrance(Car c, int entrance)
+    {
+        switch(entrance)
+        {
+            case 1:
+            {
+                Entrance1.addLast(c);
+                break;
+            }
+            case 2:
+            {
+                Entrance2.addLast(c);
+                break;
+            }
+            case 3:
+            {
+                Entrance3.addLast(c);
+                break;
+            }
+            case 4:
+            {
+                Entrance4.addLast(c);
+                break;
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -41,8 +78,9 @@ public class Controller implements Initializable
 
         for (int i = 0; i < carCount; i++)
         {
-            cars[i] = new Thread(new Car());
+            cars[i] = new Thread(new Car(i));
         }
+
         for (int i = 0; i < carCount; i++)
         {
             drive(cars[i]);

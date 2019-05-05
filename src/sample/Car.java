@@ -2,9 +2,6 @@ package sample;
 
 import javafx.animation.PathTransition;
 import javafx.animation.SequentialTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -12,6 +9,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
@@ -20,19 +18,31 @@ public class Car implements Runnable
 {
     private static Pane panel;  //pane na ktorym jest rysowane
     private Circle car;     //nasza kolka czyli samochod
+
+    private int ID;
     private float startAngle;   //miejsce z ktorego wjezdzamy na rondo
     private float angle;    //jaki kat zataczamy na rondzie
+    private int quarter;
     private Random rand;    //pomocnicze do randomow
+
     private PathTransition transitionIN;
     private PathTransition transitionOUT;
     private PathTransition transitionROUNDABOUT;
     private SequentialTransition animation;
 
-    public Car()
+    private boolean droveIN;
+    private TrafficController trafficController;
+
+    public Car(int ID)
     {
+        this.ID = ID;
         rand = new Random();
         this.startAngle = rand.nextInt(3) * 90;
         this.angle = (rand.nextInt(3) + 1) * 90;
+        quarter = 0;
+        droveIN = false;
+        trafficController = new TrafficController(quarter, ID);
+        System.out.println("Car" + ID + " startAngle: " + startAngle + "; angle: " + angle);
     }
 
     public static void setPane(Pane p)
@@ -54,7 +64,7 @@ public class Car implements Runnable
         driveOUT();
         animation = new SequentialTransition(transitionIN, transitionROUNDABOUT, transitionOUT);
         animation.setOnFinished(actionEvent -> car.setOpacity(0));
-        animation.setCycleCount(PathTransition.INDEFINITE);
+        //animation.setCycleCount(PathTransition.INDEFINITE);
         animation.play();
     }
 
@@ -85,6 +95,7 @@ public class Car implements Runnable
                 line.setStartY(-20);
                 line.setEndX(165);
                 line.setEndY(-20);
+                quarter = 1;
                 break;
             }
             case 90:    //jazda z gory
@@ -93,6 +104,7 @@ public class Car implements Runnable
                 line.setStartY(-300);
                 line.setEndX(-20);
                 line.setEndY(-165);
+                quarter = 2;
                 break;
             }
             case 180:       //jazda z lewej
@@ -101,6 +113,7 @@ public class Car implements Runnable
                 line.setStartY(20);
                 line.setEndX(-165);
                 line.setEndY(20);
+                quarter = 3;
                 break;
             }
             case 270:       //jazda z dolu
@@ -109,10 +122,34 @@ public class Car implements Runnable
                 line.setStartY(300);
                 line.setEndX(20);
                 line.setEndY(165);
+                quarter = 4;
                 break;
             }
         }
         transitionIN.setPath(line);
+        Thread quarterTh = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < angle / 90; i++)
+                {
+                    //System.out.println("Car" + ID + " quarter: " + quarter);
+                    trafficController.setQuarter(quarter);
+                    quarter = (quarter + 1) % 5;
+                    if(quarter == 0) quarter = 1;
+                    try
+                    {
+                        sleep(2000);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                quarter = 0;
+                //System.out.println("Car" + ID + " quarter: " + quarter);
+                trafficController.setQuarter(quarter);
+            }
+        });
         transitionIN.setOnFinished(actionEvent -> {
             animation.pause();
             //tu zamiast sleepa bedzie na semaforach
@@ -124,7 +161,9 @@ public class Car implements Runnable
             {
                 System.out.println(e.getMessage());
             }
+            droveIN = true;
             animation.play();
+            quarterTh.start();
         });
     }
 
@@ -176,5 +215,25 @@ public class Car implements Runnable
     private int driveTime()
     {
         return (int) (2 * (angle/90));
+    }
+
+    public int entranceNumber()
+    {
+        switch((int) startAngle)
+        {
+            case 0:
+                return 1;
+            case 90:
+                return 2;
+            case 180:
+                return 3;
+            case 270:
+                return 4;
+        }
+        return 0;
+    }
+
+    public boolean isDroveIN() {
+        return droveIN;
     }
 }
