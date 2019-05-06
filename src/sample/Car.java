@@ -8,8 +8,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-
-import java.util.LinkedList;
 import java.util.Random;
 
 import static java.lang.Thread.sleep;
@@ -30,8 +28,8 @@ public class Car implements Runnable
     private PathTransition transitionROUNDABOUT;
     private SequentialTransition animation;
 
-    private boolean droveIN;
-    private TrafficController trafficController;
+    private DriveInSemaphore driveInSemaphore;
+    private DriveRoundaboutSemaphore driveRoundaboutSemaphore;
 
     public Car(int ID)
     {
@@ -39,10 +37,10 @@ public class Car implements Runnable
         rand = new Random();
         this.startAngle = rand.nextInt(3) * 90;
         this.angle = (rand.nextInt(3) + 1) * 90;
-        quarter = 0;
-        droveIN = false;
-        trafficController = new TrafficController(quarter, ID);
+        quarter = entranceNumber();
         System.out.println("Car" + ID + " startAngle: " + startAngle + "; angle: " + angle);
+        driveInSemaphore = new DriveInSemaphore(entranceNumber());
+        driveRoundaboutSemaphore = new DriveRoundaboutSemaphore();
     }
 
     public static void setPane(Pane p)
@@ -54,6 +52,7 @@ public class Car implements Runnable
     public void run()
     {
         car = new Circle();
+        car.setOpacity(0);
         car.setLayoutX(300);
         car.setLayoutY(300);
         car.setRadius(15);
@@ -65,6 +64,8 @@ public class Car implements Runnable
         animation = new SequentialTransition(transitionIN, transitionROUNDABOUT, transitionOUT);
         animation.setOnFinished(actionEvent -> car.setOpacity(0));
         //animation.setCycleCount(PathTransition.INDEFINITE);
+        driveInSemaphore.acquire();
+        car.setOpacity(1);
         animation.play();
     }
 
@@ -95,7 +96,6 @@ public class Car implements Runnable
                 line.setStartY(-20);
                 line.setEndX(165);
                 line.setEndY(-20);
-                quarter = 1;
                 break;
             }
             case 90:    //jazda z gory
@@ -104,7 +104,6 @@ public class Car implements Runnable
                 line.setStartY(-300);
                 line.setEndX(-20);
                 line.setEndY(-165);
-                quarter = 2;
                 break;
             }
             case 180:       //jazda z lewej
@@ -113,7 +112,6 @@ public class Car implements Runnable
                 line.setStartY(20);
                 line.setEndX(-165);
                 line.setEndY(20);
-                quarter = 3;
                 break;
             }
             case 270:       //jazda z dolu
@@ -122,7 +120,6 @@ public class Car implements Runnable
                 line.setStartY(300);
                 line.setEndX(20);
                 line.setEndY(165);
-                quarter = 4;
                 break;
             }
         }
@@ -132,10 +129,8 @@ public class Car implements Runnable
             public void run() {
                 for (int i = 0; i < angle / 90; i++)
                 {
-                    //System.out.println("Car" + ID + " quarter: " + quarter);
-                    trafficController.setQuarter(quarter);
-                    quarter = (quarter + 1) % 5;
-                    if(quarter == 0) quarter = 1;
+                    System.out.println("Car" + ID + " quarter: " + quarter);
+                    //driveRoundaboutSemaphore.acquire(quarter);
                     try
                     {
                         sleep(2000);
@@ -144,10 +139,12 @@ public class Car implements Runnable
                     {
                         e.printStackTrace();
                     }
+                    //driveRoundaboutSemaphore.release(quarter);
+                    quarter = (quarter + 1) % 5;
+                    if(quarter == 0) quarter = 1;
                 }
                 quarter = 0;
-                //System.out.println("Car" + ID + " quarter: " + quarter);
-                trafficController.setQuarter(quarter);
+                System.out.println("Car" + ID + " quarter: " + quarter);
             }
         });
         transitionIN.setOnFinished(actionEvent -> {
@@ -161,9 +158,21 @@ public class Car implements Runnable
             {
                 System.out.println(e.getMessage());
             }
-            droveIN = true;
-            animation.play();
+            driveInSemaphore.release();
             quarterTh.start();
+            /*while(DriveRoundaboutSemaphore.getQuarterSemaphore(quarter).availablePermits() != 10)
+            {
+                try
+                {
+                    sleep(30);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }*/
+            //driveRoundaboutSemaphore.acquire(quarter);
+            animation.play();
         });
     }
 
@@ -231,9 +240,5 @@ public class Car implements Runnable
                 return 4;
         }
         return 0;
-    }
-
-    public boolean isDroveIN() {
-        return droveIN;
     }
 }
