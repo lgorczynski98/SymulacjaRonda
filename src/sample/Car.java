@@ -1,8 +1,11 @@
 package sample;
 
+import javafx.animation.Animation;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -72,15 +75,76 @@ public class Car implements Runnable
         driveIN();
         driveRoundabout();
         driveOUT();
-        animation = new SequentialTransition(transitionIN, transitionROUNDABOUT, transitionOUT);
+        animation = new SequentialTransition(transitionROUNDABOUT, transitionOUT);
         animation.setOnFinished(actionEvent -> {
             carsLeft--;
             panel.getChildren().remove(animation);
             panel.getChildren().remove(car);
         });
         driveInSemaphore.acquire();
+        //animation.play();
+        transitionIN.play();
         car.setOpacity(1);
-        animation.play();
+        transitionIN.statusProperty().addListener(new ChangeListener<Animation.Status>() {
+            @Override
+            public void changed(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status t1)
+            {
+                Thread quarterTh = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try
+                        {
+                            sleep(750);
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i < angle / 90; i++)
+                        {
+                            //System.out.println("Car" + ID + " quarter: " + quarter);
+                            driveRoundaboutSemaphore.acquire(quarter);
+                            try
+                            {
+                                sleep(2000);
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            driveRoundaboutSemaphore.release(quarter);
+                            quarter = (quarter + 1) % 5;
+                            if(quarter == 0) quarter = 1;
+                        }
+                        quarter = 0;
+                        //System.out.println("Car" + ID + " quarter: " + quarter);
+                    }
+                });
+
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        int prevoiusQuarter = quarter - 1;
+                        if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
+                        try
+                        {
+                            //animation.play();
+                            driveRoundaboutSemaphore.acquireMax(prevoiusQuarter);
+                            driveInSemaphore.release();
+                            quarterTh.start();
+                            animation.play();
+                            driveRoundaboutSemaphore.releaseMax(prevoiusQuarter);
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                t.start();
+            }
+        });
     }
 
     private void driveRoundabout()
@@ -139,44 +203,6 @@ public class Car implements Runnable
             }
         }
         transitionIN.setPath(line);
-        Thread quarterTh = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try
-                {
-                    sleep(300);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                for (int i = 0; i < angle / 90; i++)
-                {
-                    //System.out.println("Car" + ID + " quarter: " + quarter);
-                    driveRoundaboutSemaphore.acquire(quarter);
-                    try
-                    {
-                        sleep(2000);
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                    driveRoundaboutSemaphore.release(quarter);
-                    quarter = (quarter + 1) % 5;
-                    if(quarter == 0) quarter = 1;
-                }
-                quarter = 0;
-                //System.out.println("Car" + ID + " quarter: " + quarter);
-            }
-        });
-
-        transitionIN.setOnFinished(actionEvent -> {
-            int prevoiusQuarter = quarter - 1;
-            if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
-            quarterTh.start();
-            driveInSemaphore.release();
-        });
     }
 
     private void driveOUT()

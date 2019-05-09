@@ -142,7 +142,7 @@ public class DriveInSemaphore
                 try
                 {
                     result = Entrance1.tryAcquire(100, TimeUnit.MICROSECONDS);
-                    System.out.println("Q1 length: " + Entrance1.getQueueLength());
+                    //System.out.println("Q1 length: " + Entrance1.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -155,7 +155,7 @@ public class DriveInSemaphore
                 try
                 {
                     result = Entrance2.tryAcquire(100, TimeUnit.MICROSECONDS);
-                    System.out.println("Q2 length: " + Entrance2.getQueueLength());
+                    //System.out.println("Q2 length: " + Entrance2.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -168,7 +168,7 @@ public class DriveInSemaphore
                 try
                 {
                     result = Entrance3.tryAcquire(100, TimeUnit.MICROSECONDS);
-                    System.out.println("Q3 length: " + Entrance3.getQueueLength());
+                    //System.out.println("Q3 length: " + Entrance3.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -181,7 +181,7 @@ public class DriveInSemaphore
                 try
                 {
                     result = Entrance4.tryAcquire(100, TimeUnit.MICROSECONDS);
-                    System.out.println("Q4 length: " + Entrance4.getQueueLength());
+                    //System.out.println("Q4 length: " + Entrance4.getQueueLength());
                 }
                 catch(Exception e)
                 {
