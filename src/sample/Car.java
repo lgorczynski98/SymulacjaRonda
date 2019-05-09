@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.animation.PathTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -9,14 +10,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import java.util.Random;
-
 import static java.lang.Thread.sleep;
+
+// TODO: 07.05.2019 Ogarnac zeby mozna bylo robic sleepy w javafx
 
 public class Car implements Runnable
 {
     private static Pane panel;  //pane na ktorym jest rysowane
     private Circle car;     //nasza kolka czyli samochod
 
+    private static int IDpool = 0;
     private int ID;
     private float startAngle;   //miejsce z ktorego wjezdzamy na rondo
     private float angle;    //jaki kat zataczamy na rondzie
@@ -26,31 +29,25 @@ public class Car implements Runnable
     private PathTransition transitionIN;
     private PathTransition transitionOUT;
     private PathTransition transitionROUNDABOUT;
+    private PauseTransition pauseTransition;
     private SequentialTransition animation;
 
     private DriveInSemaphore driveInSemaphore;
     private DriveRoundaboutSemaphore driveRoundaboutSemaphore;
 
-    public Car(int ID)
+    private static int carsLeft = 0;
+
+    public Car()
     {
-        this.ID = ID;
+        this.ID = IDpool++;
         rand = new Random();
-        this.startAngle = rand.nextInt(3) * 90;
+        this.startAngle = (rand.nextInt(4)) * 90;
         this.angle = (rand.nextInt(3) + 1) * 90;
         quarter = entranceNumber();
         System.out.println("Car" + ID + " startAngle: " + startAngle + "; angle: " + angle);
         driveInSemaphore = new DriveInSemaphore(entranceNumber());
         driveRoundaboutSemaphore = new DriveRoundaboutSemaphore();
-    }
-
-    public static void setPane(Pane p)
-    {
-        panel = p;
-    }
-
-    @Override
-    public void run()
-    {
+        carsLeft++;
         car = new Circle();
         car.setOpacity(0);
         car.setLayoutX(300);
@@ -58,12 +55,33 @@ public class Car implements Runnable
         car.setRadius(15);
         car.setFill(Color.color(rand.nextDouble(), rand.nextDouble(), rand.nextDouble()));
         panel.getChildren().add(car);
+    }
+
+    public static void setPane(Pane p)
+    {
+        panel = p;
+    }
+
+    public static int getCarsLeft()
+    {
+        return carsLeft;
+    }
+
+    @Override
+    public void run()
+    {
+        pauseTransition = new PauseTransition();
+        //pauseTransition.setDuration(Duration.millis(750));
+        pauseTransition.setDuration(Duration.hours(1));
         driveIN();
         driveRoundabout();
         driveOUT();
-        animation = new SequentialTransition(transitionIN, transitionROUNDABOUT, transitionOUT);
-        animation.setOnFinished(actionEvent -> car.setOpacity(0));
-        //animation.setCycleCount(PathTransition.INDEFINITE);
+        animation = new SequentialTransition(transitionIN, pauseTransition, transitionROUNDABOUT, transitionOUT);
+        animation.setOnFinished(actionEvent -> {
+            carsLeft--;
+            panel.getChildren().remove(animation);
+            panel.getChildren().remove(car);
+        });
         driveInSemaphore.acquire();
         car.setOpacity(1);
         animation.play();
@@ -88,6 +106,8 @@ public class Car implements Runnable
         transitionIN.setDuration(Duration.seconds(2));
         transitionIN.setNode(car);
         Line line = new Line();
+
+
         switch((int)startAngle)
         {
             case 0:     //jazda z prawej
@@ -127,10 +147,18 @@ public class Car implements Runnable
         Thread quarterTh = new Thread(new Runnable() {
             @Override
             public void run() {
+                try
+                {
+                    sleep(300);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
                 for (int i = 0; i < angle / 90; i++)
                 {
-                    System.out.println("Car" + ID + " quarter: " + quarter);
-                    //driveRoundaboutSemaphore.acquire(quarter);
+                    //System.out.println("Car" + ID + " quarter: " + quarter);
+                    driveRoundaboutSemaphore.acquire(quarter);
                     try
                     {
                         sleep(2000);
@@ -139,40 +167,60 @@ public class Car implements Runnable
                     {
                         e.printStackTrace();
                     }
-                    //driveRoundaboutSemaphore.release(quarter);
+                    driveRoundaboutSemaphore.release(quarter);
                     quarter = (quarter + 1) % 5;
                     if(quarter == 0) quarter = 1;
                 }
                 quarter = 0;
-                System.out.println("Car" + ID + " quarter: " + quarter);
+                //System.out.println("Car" + ID + " quarter: " + quarter);
             }
         });
+
         transitionIN.setOnFinished(actionEvent -> {
-            animation.pause();
-            //tu zamiast sleepa bedzie na semaforach
-            try
-            {
-                sleep(rand.nextInt(30) + 5);
-            }
-            catch(Exception e)
-            {
-                System.out.println(e.getMessage());
-            }
-            driveInSemaphore.release();
+            int prevoiusQuarter = quarter - 1;
+            if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
+            final int prevQ = prevoiusQuarter;
+            /*animation.pause();
+            if(driveRoundaboutSemaphore.tryAcquireMax(prevoiusQuarter))
+                driveRoundaboutSemaphore.releaseMax(prevoiusQuarter);
+            else
+                pauseTransition.setDuration(Duration.millis(2000));
+            animation.play();*/
+            Thread th = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(!driveRoundaboutSemaphore.tryAcquireMax(prevQ))
+                    {
+                        try
+                        {
+                           sleep(10);
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    driveRoundaboutSemaphore.releaseMax(prevQ);
+                    /*try
+                    {
+                        sleep(750);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }*/
+                    animation.playFrom(Duration.hours(1));
+                }
+            });
+            th.start();
+
+        });
+
+        pauseTransition.setOnFinished(actionEvent -> {
+            //animation.pause();
             quarterTh.start();
-            /*while(DriveRoundaboutSemaphore.getQuarterSemaphore(quarter).availablePermits() != 10)
-            {
-                try
-                {
-                    sleep(30);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }*/
-            //driveRoundaboutSemaphore.acquire(quarter);
-            animation.play();
+            driveInSemaphore.release();
+            //animation.play();
         });
     }
 

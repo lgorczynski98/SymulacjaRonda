@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class DriveInSemaphore
 {
@@ -25,6 +26,7 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance1.acquire();
+                    System.out.println("Q1 length: " + Entrance1.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -37,6 +39,7 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance2.acquire();
+                    System.out.println("Q2 length: " + Entrance2.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -49,6 +52,7 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance3.acquire();
+                    System.out.println("Q3 length: " + Entrance3.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -61,6 +65,7 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance4.acquire();
+                    System.out.println("Q4 length: " + Entrance4.getQueueLength());
                 }
                 catch(Exception e)
                 {
@@ -124,5 +129,67 @@ public class DriveInSemaphore
                 break;
             }
         }
+    }
+
+    public boolean tryAcquire()
+    {
+        boolean result = false;
+
+        switch(entranceNumber)
+        {
+            case 1:
+            {
+                try
+                {
+                    result = Entrance1.tryAcquire(100, TimeUnit.MICROSECONDS);
+                    System.out.println("Q1 length: " + Entrance1.getQueueLength());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case 2:
+            {
+                try
+                {
+                    result = Entrance2.tryAcquire(100, TimeUnit.MICROSECONDS);
+                    System.out.println("Q2 length: " + Entrance2.getQueueLength());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case 3:
+            {
+                try
+                {
+                    result = Entrance3.tryAcquire(100, TimeUnit.MICROSECONDS);
+                    System.out.println("Q3 length: " + Entrance3.getQueueLength());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            case 4:
+            {
+                try
+                {
+                    result = Entrance4.tryAcquire(100, TimeUnit.MICROSECONDS);
+                    System.out.println("Q4 length: " + Entrance4.getQueueLength());
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+        return result;
     }
 }
