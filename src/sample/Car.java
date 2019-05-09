@@ -29,7 +29,6 @@ public class Car implements Runnable
     private PathTransition transitionIN;
     private PathTransition transitionOUT;
     private PathTransition transitionROUNDABOUT;
-    private PauseTransition pauseTransition;
     private SequentialTransition animation;
 
     private DriveInSemaphore driveInSemaphore;
@@ -70,13 +69,10 @@ public class Car implements Runnable
     @Override
     public void run()
     {
-        pauseTransition = new PauseTransition();
-        //pauseTransition.setDuration(Duration.millis(750));
-        pauseTransition.setDuration(Duration.hours(1));
         driveIN();
         driveRoundabout();
         driveOUT();
-        animation = new SequentialTransition(transitionIN, pauseTransition, transitionROUNDABOUT, transitionOUT);
+        animation = new SequentialTransition(transitionIN, transitionROUNDABOUT, transitionOUT);
         animation.setOnFinished(actionEvent -> {
             carsLeft--;
             panel.getChildren().remove(animation);
@@ -106,7 +102,6 @@ public class Car implements Runnable
         transitionIN.setDuration(Duration.seconds(2));
         transitionIN.setNode(car);
         Line line = new Line();
-
 
         switch((int)startAngle)
         {
@@ -179,48 +174,8 @@ public class Car implements Runnable
         transitionIN.setOnFinished(actionEvent -> {
             int prevoiusQuarter = quarter - 1;
             if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
-            final int prevQ = prevoiusQuarter;
-            /*animation.pause();
-            if(driveRoundaboutSemaphore.tryAcquireMax(prevoiusQuarter))
-                driveRoundaboutSemaphore.releaseMax(prevoiusQuarter);
-            else
-                pauseTransition.setDuration(Duration.millis(2000));
-            animation.play();*/
-            Thread th = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while(!driveRoundaboutSemaphore.tryAcquireMax(prevQ))
-                    {
-                        try
-                        {
-                           sleep(10);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    driveRoundaboutSemaphore.releaseMax(prevQ);
-                    /*try
-                    {
-                        sleep(750);
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }*/
-                    animation.playFrom(Duration.hours(1));
-                }
-            });
-            th.start();
-
-        });
-
-        pauseTransition.setOnFinished(actionEvent -> {
-            //animation.pause();
             quarterTh.start();
             driveInSemaphore.release();
-            //animation.play();
         });
     }
 
