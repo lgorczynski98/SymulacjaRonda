@@ -5,10 +5,10 @@ import java.util.concurrent.TimeUnit;
 
 public class DriveInSemaphore
 {
-    private static Semaphore Entrance1 = new Semaphore(1);
-    private static Semaphore Entrance2 = new Semaphore(1);
-    private static Semaphore Entrance3 = new Semaphore(1);
-    private static Semaphore Entrance4 = new Semaphore(1);
+    volatile private static Semaphore Entrance1 = new Semaphore(1);
+    volatile private static Semaphore Entrance2 = new Semaphore(1);
+    volatile private static Semaphore Entrance3 = new Semaphore(1);
+    volatile private static Semaphore Entrance4 = new Semaphore(1);
 
     private int entranceNumber;
 
@@ -26,11 +26,12 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance1.acquire();
-                    System.out.println("Q1 length: " + Entrance1.getQueueLength());
+                    //System.out.println("Q1 length: " + Entrance1.getQueueLength());
                 }
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem acquire Error");
                 }
                 break;
             }
@@ -39,11 +40,12 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance2.acquire();
-                    System.out.println("Q2 length: " + Entrance2.getQueueLength());
+                    //System.out.println("Q2 length: " + Entrance2.getQueueLength());
                 }
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem acquire Error");
                 }
                 break;
             }
@@ -52,11 +54,12 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance3.acquire();
-                    System.out.println("Q3 length: " + Entrance3.getQueueLength());
+                    //System.out.println("Q3 length: " + Entrance3.getQueueLength());
                 }
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem acquire Error");
                 }
                 break;
             }
@@ -65,11 +68,12 @@ public class DriveInSemaphore
                 try
                 {
                     Entrance4.acquire();
-                    System.out.println("Q4 length: " + Entrance4.getQueueLength());
+                    //System.out.println("Q4 length: " + Entrance4.getQueueLength());
                 }
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem acquire Error");
                 }
                 break;
             }
@@ -89,6 +93,7 @@ public class DriveInSemaphore
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem release Error");
                 }
                 break;
             }
@@ -101,6 +106,7 @@ public class DriveInSemaphore
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem release Error");
                 }
                 break;
             }
@@ -113,6 +119,7 @@ public class DriveInSemaphore
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem release Error");
                 }
                 break;
             }
@@ -125,6 +132,7 @@ public class DriveInSemaphore
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    System.out.println("DriveINSem release Error");
                 }
                 break;
             }

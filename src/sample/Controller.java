@@ -8,7 +8,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.Semaphore;
+
 import static java.lang.Thread.sleep;
 
 public class Controller implements Initializable
@@ -18,23 +20,27 @@ public class Controller implements Initializable
     @FXML
     public Text textField;
 
-    private int carCount;
+    volatile private int carCount;
+
+    volatile private List cars = Collections.synchronizedList(new ArrayList<>());
 
     public Controller()
     {
         carCount = 50;
     }
 
-    private void drive(Thread th)
+    private void drive(Object o)
     {
-        th.start();
+        Thread th = (Thread)o;
         try
         {
+            if(th != null)th.start();
             sleep(30);
         }
         catch(Exception e)
         {
             System.out.println(e.getMessage());
+            System.out.println("th.start Error");
         }
     }
 
@@ -42,13 +48,15 @@ public class Controller implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         Car.setPane(panel);
-        Thread []cars = new Thread[carCount];
+        //ArrayList<Thread> cars = new ArrayList<>();
 
         Thread carsLeft = new Thread(new Task<Void>() {
 
             @Override
-            public Void call() {
-                for (int i = 0; i < 1000; i++) {
+            public Void call()
+            {
+                for (int i = 0; i < 1000; i++)
+                {
                     try
                     {
                         sleep(100);
@@ -56,6 +64,8 @@ public class Controller implements Initializable
                     catch (Exception e)
                     {
                         e.printStackTrace();
+                        System.out.println("carsLeftError");
+                        return null;
                     }
                     Platform.runLater(() -> textField.setText("Samochodow: " + Car.getCarsLeft()));
                 }
@@ -63,17 +73,50 @@ public class Controller implements Initializable
             }
         });
 
-        for (int i = 0; i < carCount; i++)
+        /*for (int i = 0; i < carCount; i++)
         {
-            cars[i] = new Thread(new Car());
+            cars.add(new Thread(new Car()));
         }
 
-        for (int i = 0; i < carCount; i++)
+        cars.forEach((car) -> car.setDaemon(true));
+
+        try
         {
-            drive(cars[i]);
+            sleep(2000);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
-        carsLeft.start();
+        for (Thread car : cars) {
+            drive(car);
+        }
+
+        carsLeft.start();*/
+        synchronized(cars)
+        {
+            for (int i = 0; i < carCount; i++)
+            {
+                try
+                {
+                    cars.add(new Thread(new Car()));
+                    //sleep(30);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+
+            for (Object car : cars) {
+                drive(car);
+            }
+
+            carsLeft.setDaemon(true);
+            carsLeft.start();
+        }
     }
 }
 
