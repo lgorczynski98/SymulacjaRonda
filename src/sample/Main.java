@@ -13,7 +13,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Rondo Zeslancow Syberyjskich");
         primaryStage.setScene(new Scene(root, 600, 600));
-        //primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
+        //primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
     }
 

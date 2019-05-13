@@ -1,13 +1,9 @@
 package sample;
 
-import javafx.animation.Animation;
 import javafx.animation.PathTransition;
-import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -15,6 +11,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
+
 import static java.lang.Thread.sleep;
 
 // TODO: 11.05.2019 line204; jesli blad w animation.play() to zmiennej jakiesj nowej zmienic wartosc i wtedy nie robic t.start 
@@ -29,7 +27,6 @@ public class Car implements Runnable
     volatile private float startAngle;   //miejsce z ktorego wjezdzamy na rondo
     volatile private float angle;    //jaki kat zataczamy na rondzie
     volatile private int quarter;
-    volatile private Random rand;    //pomocnicze do randomow
 
     volatile private PathTransition transitionIN;
     volatile private PathTransition transitionOUT;
@@ -37,34 +34,57 @@ public class Car implements Runnable
     volatile private SequentialTransition animation;
 
     volatile private DriveInSemaphore driveInSemaphore;
-    volatile private DriveRoundaboutSemaphore driveRoundaboutSemaphore;
+    volatile private static DriveRoundaboutSemaphore driveRoundaboutSemaphore;
+    volatile private static Semaphore creatingSemaphore;
 
-    volatile private static int carsLeft = 0;
+    private static int carsLeft = 0;
 
     public Car()
     {
-        this.ID = IDpool++;
-        rand = new Random();
-        this.startAngle = (rand.nextInt(4)) * 90;
-        this.angle = (rand.nextInt(3) + 1) * 90;
-        quarter = entranceNumber();
-        System.out.println("Car" + ID + " startAngle: " + startAngle + "; angle: " + angle);
-        driveInSemaphore = new DriveInSemaphore(entranceNumber());
-        driveRoundaboutSemaphore = new DriveRoundaboutSemaphore();
-        carsLeft++;
-        car = new Circle();
-        car.setOpacity(0);
-        car.setLayoutX(300);
-        car.setLayoutY(300);
-        car.setRadius(15);
-        car.setStroke(Color.LIGHTGREY);
-        car.setFill(Color.color(rand.nextDouble(), rand.nextDouble(), rand.nextDouble()));
-        panel.getChildren().add(car);
+        try
+        {
+            this.ID = IDpool++;
+            Random rand = new Random();
+            this.startAngle = (rand.nextInt(4)) * 90;
+            this.angle = (rand.nextInt(3) + 1) * 90;
+            quarter = entranceNumber();
+            //System.out.println("Car" + ID + " startAngle: " + startAngle + "; angle: " + angle);
+            driveInSemaphore = new DriveInSemaphore(entranceNumber());
+            driveRoundaboutSemaphore = new DriveRoundaboutSemaphore();
+            carsLeft++;
+            car = new Circle();
+            car.setOpacity(0);
+            car.setLayoutX(300);
+            car.setLayoutY(300);
+            car.setRadius(15);
+            car.setStroke(Color.LIGHTGREY);
+            car.setFill(Color.color(rand.nextDouble(), rand.nextDouble(), rand.nextDouble()));
+            panel.getChildren().add(car);
+            driveIN();
+            driveRoundabout();
+            driveOUT();
+            animation = new SequentialTransition(transitionROUNDABOUT, transitionOUT);
+            animation.setOnFinished(actionEvent -> {
+                carsLeft--;
+                panel.getChildren().remove(animation);
+                panel.getChildren().remove(car);
+            });
+            creatingSemaphore.release();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static void setPane(Pane p)
     {
         panel = p;
+    }
+
+    public static void setCreatingSemaphore(Semaphore sem)
+    {
+        creatingSemaphore = sem;
     }
 
     public static int getCarsLeft()
@@ -75,26 +95,36 @@ public class Car implements Runnable
     @Override
     public void run()
     {
-        driveIN();
-        driveRoundabout();
-        driveOUT();
-        animation = new SequentialTransition(transitionROUNDABOUT, transitionOUT);
-        animation.setOnFinished(actionEvent -> {
-            carsLeft--;
-            //panel.getChildren().remove(animation);
-            panel.getChildren().remove(car);
-        });
+        Random rand = new Random();
         driveInSemaphore.acquire();
-        //animation.play();
-        transitionIN.play();
+        try
+        {
+            sleep(rand.nextInt(400) + 100);
+            transitionIN.play();
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+            panel.getChildren().remove(car);
+            driveInSemaphore.release();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         car.setOpacity(1);
-        /*transitionIN.statusProperty().addListener(new ChangeListener<Animation.Status>() {
-            @Override
-            public void changed(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status t1)
-            {
-                Thread quarterTh = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+        transitionIN.setOnFinished(actionEvent -> {
+
+            Thread t = new Thread(() -> {
+                int previousQuarter = quarter - 1;
+                if(previousQuarter <= 0) previousQuarter = 4;
+                try
+                {
+                    driveRoundaboutSemaphore.acquireMaxRelease(previousQuarter);
+                    driveInSemaphore.release();
+                    transitionIN.setNode(null);
+                    Thread quarterTh = new Thread(() -> {
                         try
                         {
                             sleep(750);
@@ -118,103 +148,27 @@ public class Car implements Runnable
                                 System.out.println("quarterTh Error");
                             }
                             driveRoundaboutSemaphore.release(quarter);
-                            quarter = (quarter + 1) % 5;
-                            if(quarter == 0) quarter = 1;
+                            int q  = (quarter + 1) % 5;
+                            if(q == 0) q = 1;
+                            quarter = q;
                         }
                         quarter = 0;
                         //System.out.println("Car" + ID + " quarter: " + quarter);
-                    }
-                });
-
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run()
-                    {
-                        int prevoiusQuarter = quarter - 1;
-                        if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
-                        try
-                        {
-                            //animation.play();
-                            //driveRoundaboutSemaphore.acquireMax(prevoiusQuarter);
-                            driveRoundaboutSemaphore.acquireMaxRelease(prevoiusQuarter);
-                            driveInSemaphore.release();
-                            quarterTh.start();
-                            animation.play();       //tu jakis blad czasem : IndexOutOfBounds ???
-                            //driveRoundaboutSemaphore.releaseMax(prevoiusQuarter);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("t Error");
-                        }
-                    }
-                });
-                t.start();
-            }
-        });*/
-
-        transitionIN.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Thread quarterTh = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try
-                        {
-                            sleep(750);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("quarterTh first wait Error");
-                        }
-                        for (int i = 0; i < angle / 90; i++)
-                        {
-                            //System.out.println("Car" + ID + " quarter: " + quarter);
-                            driveRoundaboutSemaphore.acquire(quarter);
-                            try
-                            {
-                                sleep(2000);
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                                System.out.println("quarterTh Error");
-                            }
-                            driveRoundaboutSemaphore.release(quarter);
-                            quarter = (quarter + 1) % 5;
-                            if(quarter == 0) quarter = 1;
-                        }
-                        quarter = 0;
-                        //System.out.println("Car" + ID + " quarter: " + quarter);
-                    }
-                });
-                
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run()
-                    {
-                        int prevoiusQuarter = quarter - 1;
-                        if(prevoiusQuarter <= 0) prevoiusQuarter = 4;
-                        try
-                        {
-                            //animation.play();
-                            //driveRoundaboutSemaphore.acquireMax(prevoiusQuarter);
-                            driveRoundaboutSemaphore.acquireMaxRelease(prevoiusQuarter);
-                            driveInSemaphore.release();
-                            quarterTh.start();
-                            animation.play();       //tu jakis blad czasem : IndexOutOfBounds ???
-                            //driveRoundaboutSemaphore.releaseMax(prevoiusQuarter);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("t Error");
-                        }
-                    }
-                });
-                t.start();
-            }
+                    });
+                    quarterTh.setDaemon(true);
+                    //quarterTh.start();
+                    Platform.runLater(quarterTh::start);
+                    if(animation != null) animation.play();       //tu jakis blad czasem : IndexOutOfBounds ???
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                    System.out.println("t Error");
+                }
+            });
+            t.setDaemon(true);
+            //t.start();
+            Platform.runLater(t::start);
         });
     }
 

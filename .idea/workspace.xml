@@ -3,19 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Car.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Controller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Controller$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/DriveInSemaphore.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/DriveInSemaphore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/DriveRoundaboutSemaphore.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/DriveRoundaboutSemaphore.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Rondo/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Rondo/sample/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Car.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/DriveInSemaphore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/DriveInSemaphore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/DriveRoundaboutSemaphore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/DriveRoundaboutSemaphore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -34,6 +30,20 @@
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="DebuggerManager">
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
@@ -79,47 +89,43 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/module-info.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
+            <state>
               <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="98" column="46" lean-forward="true" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
+            <state relative-caret-position="-298">
+              <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#drive#0;class#Controller#0" />
+                <element signature="e#1310#1963#0" expanded="true" />
+                <element signature="e#1456#1906#1" />
+                <element signature="e#1962#1963#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/Car.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+            <state relative-caret-position="797">
+              <caret line="173" column="41" selection-start-line="173" selection-start-column="41" selection-end-line="173" selection-end-column="41" />
               <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3690#6208#0" expanded="true" />
+                <element signature="e#6207#6208#0" expanded="true" />
                 <element signature="method#driveRoundabout#0;class#Car#0" />
                 <element signature="method#driveIN#0;class#Car#0" />
                 <element signature="method#driveOUT#0;class#Car#0" />
+                <element signature="e#9475#9476#0" expanded="true" />
                 <element signature="method#entranceNumber#0;class#Car#0" />
               </folding>
             </state>
@@ -129,8 +135,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/DriveRoundaboutSemaphore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+            <state relative-caret-position="136">
+              <caret line="8" column="82" selection-start-line="8" selection-start-column="82" selection-end-line="8" selection-end-column="82" />
               <folding>
                 <element signature="method#acquire#0;class#DriveRoundaboutSemaphore#0" />
                 <element signature="method#release#0;class#DriveRoundaboutSemaphore#0" />
@@ -148,7 +154,7 @@
         <entry file="file://$PROJECT_DIR$/src/sample/DriveInSemaphore.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+              <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#acquire#0;class#DriveInSemaphore#0" />
@@ -203,13 +209,19 @@
         <option value="$PROJECT_DIR$/src/sample/QuarterController.java" />
         <option value="$PROJECT_DIR$/src/sample/WaitingThread.java" />
         <option value="$PROJECT_DIR$/src/sample/sample.fxml" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
         <option value="$PROJECT_DIR$/src/sample/DriveRoundaboutSemaphore.java" />
         <option value="$PROJECT_DIR$/src/sample/DriveInSemaphore.java" />
-        <option value="$PROJECT_DIR$/src/sample/Main.java" />
-        <option value="$PROJECT_DIR$/src/sample/Car.java" />
         <option value="$PROJECT_DIR$/src/sample/Controller.java" />
+        <option value="$PROJECT_DIR$/src/sample/Car.java" />
       </list>
     </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
@@ -226,6 +238,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -248,7 +261,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -262,7 +274,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557327831441" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557748528802" />
     <property name="dynamic.classpath" value="false" />
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.0" />
@@ -383,12 +395,15 @@
       <workItem from="1557591436467" duration="2647000" />
       <workItem from="1557594196688" duration="344000" />
       <workItem from="1557669571299" duration="1477000" />
-      <workItem from="1557683078287" duration="733000" />
+      <workItem from="1557683078287" duration="8527000" />
+      <workItem from="1557733746543" duration="4440000" />
+      <workItem from="1557745299006" duration="3227000" />
+      <workItem from="1557764550636" duration="4929000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95785000" />
+    <option name="totallyTimeSpent" value="116175000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -403,7 +418,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.14765458" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.15245202" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" weight="0.32995737" />
       <window_info id="Designer" order="3" />
@@ -412,13 +427,13 @@
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.35427952" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31310943" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.27410617" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.22318527" />
       <window_info anchor="bottom" id="Application Servers" order="7" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3531961" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.20585048" />
       <window_info anchor="bottom" id="Problems" order="9" />
       <window_info anchor="bottom" id="Changes" order="10" />
       <window_info anchor="bottom" id="Profiler" order="11" />
@@ -431,10 +446,10 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="JetGradle" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32995737" />
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="right" id="Maven Projects" order="6" />
-      <window_info anchor="right" id="Maven" order="7" />
+      <window_info anchor="right" id="Maven" order="7" weight="0.32995737" />
       <window_info anchor="right" id="Capture Analysis" order="8" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
       <window_info anchor="right" id="Theme Preview" order="10" />
@@ -540,28 +555,28 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/sample/QuarterController.java" />
-    <entry file="jar://D:/Java/javafx-sdk-11.0.2/lib/javafx.graphics.jar!/com/sun/glass/ui/win/WinApplication.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://D:/Java/jdk-11.0.1/lib/src.zip!/java.base/java/lang/Thread.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/WaitingThread.java" />
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1107">
-          <caret line="833" selection-start-line="833" selection-end-line="833" />
+        <state relative-caret-position="204">
+          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/WaitingThread.java" />
     <entry file="file://$PROJECT_DIR$/src/module-info.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
+        <state>
           <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/DriveRoundaboutSemaphore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        <state relative-caret-position="136">
+          <caret line="8" column="82" selection-start-line="8" selection-start-column="82" selection-end-line="8" selection-end-column="82" />
           <folding>
             <element signature="method#acquire#0;class#DriveRoundaboutSemaphore#0" />
             <element signature="method#release#0;class#DriveRoundaboutSemaphore#0" />
@@ -577,7 +592,7 @@
     <entry file="file://$PROJECT_DIR$/src/sample/DriveInSemaphore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#acquire#0;class#DriveInSemaphore#0" />
@@ -595,35 +610,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
+    <entry file="jar://D:/Java/javafx-sdk-11.0.2/lib/javafx.graphics.jar!/com/sun/javafx/tk/quantum/QuantumToolkit.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+        <state relative-caret-position="91">
+          <caret line="408" selection-start-line="408" selection-end-line="408" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/javafx-sdk-11.0.2/lib/javafx.graphics.jar!/com/sun/glass/ui/InvokeLaterDispatcher.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="107" selection-start-line="107" selection-end-line="107" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/javafx-sdk-11.0.2/lib/javafx.graphics.jar!/com/sun/glass/ui/win/WinApplication.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9498#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk-11.0.1/lib/src.zip!/java.base/java/lang/Thread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="833" selection-start-line="833" selection-end-line="833" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-298">
+          <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#drive#0;class#Controller#0" />
+            <element signature="e#1310#1963#0" expanded="true" />
+            <element signature="e#1456#1906#1" />
+            <element signature="e#1962#1963#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Car.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="61" column="37" lean-forward="true" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+        <state relative-caret-position="797">
+          <caret line="173" column="41" selection-start-line="173" selection-start-column="41" selection-end-line="173" selection-end-column="41" />
           <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3690#6208#0" expanded="true" />
+            <element signature="e#6207#6208#0" expanded="true" />
             <element signature="method#driveRoundabout#0;class#Car#0" />
             <element signature="method#driveIN#0;class#Car#0" />
             <element signature="method#driveOUT#0;class#Car#0" />
+            <element signature="e#9475#9476#0" expanded="true" />
             <element signature="method#entranceNumber#0;class#Car#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="98" column="46" lean-forward="true" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
