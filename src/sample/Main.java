@@ -14,7 +14,6 @@ public class Main extends Application {
         primaryStage.setTitle("Rondo Zeslancow Syberyjskich");
         primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.setResizable(false);
-        //primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
     }
 

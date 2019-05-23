@@ -100,7 +100,7 @@ public class Car implements Runnable
         try
         {
             sleep(rand.nextInt(400) + 100);
-            transitionIN.play();
+            Platform.runLater(transitionIN::play);
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -158,7 +158,7 @@ public class Car implements Runnable
                     quarterTh.setDaemon(true);
                     //quarterTh.start();
                     Platform.runLater(quarterTh::start);
-                    if(animation != null) animation.play();       //tu jakis blad czasem : IndexOutOfBounds ???
+                    if(animation != null) Platform.runLater(animation::play);      //tu jakis blad czasem : IndexOutOfBounds ???
                 }
                 catch(Exception e)
                 {

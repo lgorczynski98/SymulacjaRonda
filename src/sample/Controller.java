@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -29,9 +27,7 @@ public class Controller implements Initializable
 
     public Controller()
     {
-        /*Random rand = new Random();
-        carCount = rand.nextInt(60) + 10;*/
-        carCount = 30;
+        carCount = 200;
     }
 
     private void drive(Object o)
@@ -60,7 +56,7 @@ public class Controller implements Initializable
             @Override
             public Void call()
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 10000; i++)
                 {
                     try
                     {
