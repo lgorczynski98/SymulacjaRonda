@@ -4,8 +4,13 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 import java.net.URL;
 import java.util.*;
@@ -15,10 +20,8 @@ import static java.lang.Thread.sleep;
 
 public class Controller implements Initializable
 {
-    @FXML
-    public Pane panel;
-    @FXML
-    public Text textField;
+    @FXML public Pane panel;
+    @FXML public Text textField;
 
     volatile private int carCount;
 
@@ -27,7 +30,7 @@ public class Controller implements Initializable
 
     public Controller()
     {
-        carCount = 200;
+        carCount = 20;
     }
 
     private void drive(Object o)
@@ -48,6 +51,7 @@ public class Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        init();
         Car.setPane(panel);
         Car.setCreatingSemaphore(creatingSemaphore);
 
@@ -56,7 +60,7 @@ public class Controller implements Initializable
             @Override
             public Void call()
             {
-                for (int i = 0; i < 10000; i++)
+                while(Car.getCarsLeft() >= 0)
                 {
                     try
                     {
@@ -69,6 +73,8 @@ public class Controller implements Initializable
                         return null;
                     }
                     Platform.runLater(() -> textField.setText("Samochodow: " + Car.getCarsLeft()));
+                    if(Car.getCarsLeft() == 0)
+                        break;
                 }
                 return null;
             }
@@ -100,6 +106,48 @@ public class Controller implements Initializable
             carsLeft.setDaemon(true);
             carsLeft.start();
         }
+    }
+
+    private void init()
+    {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Przygotowywanie ronda");
+        dialog.setHeaderText("Proszę podać parametry symulacji ronda");
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150,10,10));
+        TextField iloscText = new TextField();
+        Slider rateSlider = new Slider();
+        rateSlider.setMin(0);
+        rateSlider.setMax(4);
+        rateSlider.setValue(1);
+        rateSlider.setShowTickLabels(true);
+        rateSlider.setShowTickMarks(true);
+        rateSlider.setMajorTickUnit(0.5);
+        grid.add(new Label("Ilość samochodów: "), 0, 0);
+        grid.add(iloscText, 1, 0);
+        grid.add(new Label("Przyśpieszenie samochodów: "), 0, 1);
+        grid.add(rateSlider, 1, 1);
+        Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
+        okButton.setDisable(true);
+        iloscText.textProperty().addListener(((observableValue, oldVal, newVal) -> {
+            okButton.setDisable(newVal.trim().isEmpty());
+        }));
+        dialog.getDialogPane().setContent(grid);
+        Platform.runLater(() -> iloscText.requestFocus());
+        dialog.setResultConverter(dialogButton -> {
+            if(dialogButton == okButtonType)
+                return new Pair<>(iloscText.getText(), String.valueOf(rateSlider.getValue()));
+            return null;
+        });
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+        result.ifPresent(pair -> {
+            carCount = Integer.valueOf(pair.getKey());
+            Car.setRate(Double.valueOf(pair.getValue()));
+        });
     }
 }
 

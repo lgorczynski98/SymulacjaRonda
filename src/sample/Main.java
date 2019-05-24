@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Rondo Zeslancow Syberyjskich");
+        primaryStage.setTitle("Rondo Simulation");
         primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.setResizable(false);
         primaryStage.show();

@@ -15,8 +15,6 @@ import java.util.concurrent.Semaphore;
 
 import static java.lang.Thread.sleep;
 
-// TODO: 11.05.2019 line204; jesli blad w animation.play() to zmiennej jakiesj nowej zmienic wartosc i wtedy nie robic t.start 
-
 public class Car implements Runnable
 {
     volatile private static Pane panel;  //pane na ktorym jest rysowane
@@ -38,11 +36,14 @@ public class Car implements Runnable
     volatile private static Semaphore creatingSemaphore;
 
     private static int carsLeft = 0;
+    private int quarterTime;      //czas przejazdu przez cwiartke ronda oraz dojazd w milisekundach
+    private static double rate = 1;
 
     public Car()
     {
         try
         {
+            quarterTime = 2000;
             this.ID = IDpool++;
             Random rand = new Random();
             this.startAngle = (rand.nextInt(4)) * 90;
@@ -64,6 +65,11 @@ public class Car implements Runnable
             driveRoundabout();
             driveOUT();
             animation = new SequentialTransition(transitionROUNDABOUT, transitionOUT);
+
+            animation.setRate(rate);
+            transitionIN.setRate(rate);
+            quarterTime = (int)(quarterTime / rate);
+
             animation.setOnFinished(actionEvent -> {
                 carsLeft--;
                 panel.getChildren().remove(animation);
@@ -92,6 +98,10 @@ public class Car implements Runnable
         return carsLeft;
     }
 
+    public static void setRate(double rate) {
+        Car.rate = rate;
+    }
+
     @Override
     public void run()
     {
@@ -99,8 +109,9 @@ public class Car implements Runnable
         driveInSemaphore.acquire();
         try
         {
-            sleep(rand.nextInt(400) + 100);
+            sleep(rand.nextInt((int)(0.2 * quarterTime)) + (int)(0.05 * quarterTime));
             Platform.runLater(transitionIN::play);
+            Platform.runLater(() -> car.setOpacity(1));
         }
         catch(IndexOutOfBoundsException e)
         {
@@ -113,7 +124,7 @@ public class Car implements Runnable
             e.printStackTrace();
         }
 
-        car.setOpacity(1);
+        //car.setOpacity(1);
         transitionIN.setOnFinished(actionEvent -> {
 
             Thread t = new Thread(() -> {
@@ -127,7 +138,7 @@ public class Car implements Runnable
                     Thread quarterTh = new Thread(() -> {
                         try
                         {
-                            sleep(750);
+                            sleep((int)(0.375 * quarterTime));
                         }
                         catch(Exception e)
                         {
@@ -140,7 +151,7 @@ public class Car implements Runnable
                             driveRoundaboutSemaphore.acquire(quarter);
                             try
                             {
-                                sleep(2000);
+                                sleep(quarterTime);
                             }
                             catch (Exception e)
                             {
